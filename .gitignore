@@ -1,0 +1,30 @@
+# Dependencies
+node_modules
+
+# Build
+dist
+
+# TypeScript
+*.tsbuildinfo
+
+# Drizzle
+.migrations
+
+# Environment
+.env
+.env.*
+
+# Docker
+docker-compose.yml
+docker-compose.yaml
+
+# Logs
+*.log
+
+# Editor
+.idea
+.vscode
+
+# Other
+Thumbs.db
+.DS_Store
