@@ -8,7 +8,6 @@ import { NewRefreshToken } from "../entities/refreshToken";
 import { env } from "../config/env";
 
 function parseExpiration(str: string) {
-  // supports "7d", "15m" etc.
   const match = str.match(/(\d+)([dhms])/);
   if (!match) return 0;
   const value = parseInt(match[1]);
@@ -24,6 +23,20 @@ export class AuthService {
   async register(data: RegisterInput) {
     const hashed = await hashPassword(data.password);
     const user = await this.users.create({ ...data, password: hashed });
+
+    import("./email").then(async ({ EmailService }) => {
+      const emailService = new EmailService();
+      try {
+        await emailService.sendEmail({
+          to: user.email,
+          template: "WELCOME",
+          variables: { name: user.name },
+        });
+      } catch (e) {
+        console.error("Failed to send welcome email", e);
+      }
+    });
+
     return this.generateTokens(user.id, user.role);
   }
 
@@ -39,7 +52,6 @@ export class AuthService {
     const stored = await this.refreshRepo.find(oldToken);
     if (!stored || stored.revoked) throw new Error(Errors.REFRESH_REVOKED);
     if (stored.expiresAt < new Date()) throw new Error(Errors.TOKEN_EXPIRED);
-    // generate new tokens and revoke old
     await this.refreshRepo.revoke(stored.id);
     return this.generateTokens(stored.userId, undefined);
   }

@@ -15,6 +15,14 @@ const envSchema = z.object({
   REFRESH_TOKEN_EXPIRES_IN: z.string().default("7d"),
   PORT: z.string().default("3000"),
   DATABASE_URL: z.string().url(),
+
+  // Email configuration
+  EMAIL_PROVIDER: z.enum(["smtp", "sendgrid"]).default("smtp"),
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.string().optional(),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
+  SENDGRID_API_KEY: z.string().optional(),
 });
 
 export const env = envSchema.parse(process.env);

@@ -3,10 +3,21 @@ import fastifySwagger from "@fastify/swagger";
 import { userRoutes } from "./routes/userRoutes";
 import authRoutes from "./routes/authRoutes";
 import jwt from "@fastify/jwt";
+import fastifySecureSession from "@fastify/secure-session";
+import fastifyPassport from "@fastify/passport";
+import passportPlugin from "./infrastructure/passport";
 import { env } from "./config/env";
 
 export const createApp = async () => {
   const server = buildServer();
+
+  await server.register(fastifySecureSession, {
+    key: Buffer.from((process.env.SESSION_SECRET || "aVeryLongRandomSecretForSessions").repeat(2).slice(0, 32)),
+    cookie: { path: "/", httpOnly: true, secure: false },
+  });
+
+  await server.register(fastifyPassport.initialize());
+  await server.register(passportPlugin);
 
   // JWT plugin
   await server.register(jwt, {
@@ -25,6 +36,7 @@ export const createApp = async () => {
 
   await server.register(userRoutes, { prefix: "/api" });
   await server.register(authRoutes, { prefix: "/auth" });
+  await server.register((await import("./routes/oauthRoutes")).default, { prefix: "/auth" });
 
   server.get("/", async () => ({ message: "Welcome to API" }));
 
