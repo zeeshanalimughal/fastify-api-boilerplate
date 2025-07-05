@@ -1,9 +1,17 @@
 import { buildServer } from "./config/index";
 import fastifySwagger from "@fastify/swagger";
 import { userRoutes } from "./routes/userRoutes";
+import authRoutes from "./routes/authRoutes";
+import jwt from "@fastify/jwt";
+import { env } from "./config/env";
 
 export const createApp = async () => {
   const server = buildServer();
+
+  // JWT plugin
+  await server.register(jwt, {
+    secret: env.JWT_ACCESS_SECRET,
+  });
 
   await server.register(fastifySwagger, {
     openapi: {
@@ -16,6 +24,7 @@ export const createApp = async () => {
   });
 
   await server.register(userRoutes, { prefix: "/api" });
+  await server.register(authRoutes, { prefix: "/auth" });
 
   server.get("/", async () => ({ message: "Welcome to API" }));
 
