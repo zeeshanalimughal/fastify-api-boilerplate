@@ -1,0 +1,23 @@
+<%- include('partials/header', { title: 'Verify Your Email Address', appName: appName }) %>
+
+<h2>Verify Your Email Address</h2>
+
+<p>Hi <%= name %>,</p>
+
+<p>Please verify your email address by clicking the button below:</p>
+
+<p style="text-align: center;">
+    <a href="<%= verificationUrl %>" class="button">Verify Email Address</a>
+</p>
+
+<div class="warning">
+    <p><strong>Important:</strong> This link expires in 24 hours.</p>
+</div>
+
+<p>If the button doesn't work, copy and paste this link:</p>
+<div class="url-link"><%= verificationUrl %></div>
+
+<p>Best regards,<br>
+The <%= appName %> Team</p>
+
+<%- include('partials/footer', { appName: appName }) %>

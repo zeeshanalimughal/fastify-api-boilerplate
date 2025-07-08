@@ -1,5 +1,6 @@
 import nodemailer, { Transporter } from "nodemailer";
 import { z } from "zod";
+import { env } from "../../../config/env";
 
 const smtpEnvSchema = z.object({
   SMTP_HOST: z.string(),
@@ -19,12 +20,12 @@ export interface SendMailOptions {
 export class SMTPProvider {
   private transporter: Transporter;
 
-  constructor(env: NodeJS.ProcessEnv) {
-    const cfg = smtpEnvSchema.parse(env);
+  constructor(processEnv: NodeJS.ProcessEnv) {
+    const cfg = smtpEnvSchema.parse(processEnv);
     this.transporter = nodemailer.createTransport({
       host: cfg.SMTP_HOST,
       port: cfg.SMTP_PORT,
-      secure: cfg.SMTP_PORT === 465, // true for 465, false for other ports
+      secure: cfg.SMTP_PORT === 465,
       auth: {
         user: cfg.SMTP_USER,
         pass: cfg.SMTP_PASS,
@@ -33,8 +34,10 @@ export class SMTPProvider {
   }
 
   async sendMail(opts: SendMailOptions) {
+    const fromEmail = env.EMAIL_FROM || `"Your App Name" <noreply@yourapp.com>`;
+
     await this.transporter.sendMail({
-      from: process.env.EMAIL_FROM || `"No Reply" <noreply@${process.env.DOMAIN || "example.com"}>`,
+      from: fromEmail,
       to: opts.to,
       subject: opts.subject,
       html: opts.html,

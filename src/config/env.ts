@@ -9,6 +9,7 @@ dotenv.config({ path: join(process.cwd(), `.env.${NODE_ENV}`) });
 dotenv.config();
 
 const envSchema = z.object({
+  APP_NAME: z.string().default("Your App Name"),
   JWT_ACCESS_SECRET: z.string().min(10),
   JWT_REFRESH_SECRET: z.string().min(10),
   ACCESS_TOKEN_EXPIRES_IN: z.string().default("15m"),
@@ -16,8 +17,13 @@ const envSchema = z.object({
   PORT: z.string().default("3000"),
   DATABASE_URL: z.string().url(),
 
+  // Base URLs
+  BASE_URL: z.string().optional(),
+  FRONTEND_URL: z.string().optional(),
+
   // Email configuration
   EMAIL_PROVIDER: z.enum(["smtp", "sendgrid"]).default("smtp"),
+  EMAIL_FROM: z.string().optional(),
   SMTP_HOST: z.string().optional(),
   SMTP_PORT: z.string().optional(),
   SMTP_USER: z.string().optional(),

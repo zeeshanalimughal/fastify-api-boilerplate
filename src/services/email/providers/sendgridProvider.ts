@@ -1,5 +1,6 @@
 import sgMail from "@sendgrid/mail";
 import { z } from "zod";
+import { env } from "../../../config/env";
 
 const sendgridEnvSchema = z.object({
   SENDGRID_API_KEY: z.string(),
@@ -12,14 +13,16 @@ export interface SendMailOptions {
 }
 
 export class SendGridProvider {
-  constructor(env: NodeJS.ProcessEnv) {
-    const cfg = sendgridEnvSchema.parse(env);
+  constructor(processEnv: NodeJS.ProcessEnv) {
+    const cfg = sendgridEnvSchema.parse(processEnv);
     sgMail.setApiKey(cfg.SENDGRID_API_KEY);
   }
 
   async sendMail(opts: SendMailOptions) {
+    const fromEmail = env.EMAIL_FROM || "no-reply@yourapp.com";
+
     await sgMail.send({
-      from: process.env.EMAIL_FROM || "no-reply@example.com",
+      from: fromEmail,
       to: opts.to,
       subject: opts.subject,
       html: opts.html,

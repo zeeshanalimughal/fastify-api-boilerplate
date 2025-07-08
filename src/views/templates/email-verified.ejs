@@ -1,0 +1,32 @@
+<%- include('partials/header', { title: 'Email Verified Successfully', appName: appName }) %>
+
+<h2>Email Verified Successfully!</h2>
+
+<p>Hi <%= name %>,</p>
+
+<p>Great news! Your email address has been successfully verified. Your account is now fully activated and you can access all features of <%= appName %>.</p>
+
+<p style="text-align: center;">
+    <a href="<%= dashboardUrl %>" class="button">Go to Dashboard</a>
+</p>
+
+<div class="highlight">
+    <p><strong>What you can do now:</strong></p>
+    <ul style="margin-left: 20px;">
+        <li>Access your full account dashboard</li>
+        <li>Receive important notifications</li>
+        <li>Use all platform features</li>
+        <li>Connect with other users</li>
+    </ul>
+</div>
+
+<p>Thank you for verifying your email address. This helps us ensure the security of your account and keep you informed about important updates.</p>
+
+<p>If you have any questions about your account or need help getting started, our support team is here to assist you.</p>
+
+<p>Welcome to <%= appName %>!</p>
+
+<p>Best regards,<br>
+The <%= appName %> Team</p>
+
+<%- include('partials/footer', { appName: appName }) %>

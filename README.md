@@ -1,77 +1,98 @@
-# Fastify + Drizzle ORM Boilerplate
+# Node.js Fastify Api Boilerplate
 
-A clean-architecture backend starter built with **Fastify**, **PostgreSQL**, and **Drizzle ORM**.  
-It ships with linting / formatting, Docker-first workflows, migrations, health checks, Swagger docs, and a modular folder layout that scales.
+A clean and modern REST API boilerplate built with **Fastify**, **Drizzle ORM**, and **PostgreSQL**.
 
----
+## ✨ Features
 
+- 🔐 **JWT Authentication** with refresh tokens
+- 📧 **Email verification** and password reset
+- 🛡️ **Protected routes** with role-based access
+- 📖 **Swagger API documentation**
+- 🎨 **Professional email templates**
+- 📝 **TypeScript** with Zod validation
+- 🛠️ **Development tools**: Prettier, ESLint, Husky
+- 📦 **Modular structure** following Clean Architecture
+- 🐳 **Docker support**
 
-## Project Structure
+## 🚀 Quick Start
 
-```
-src/
-  app.ts             Fastify plugin registration & routes
-  server.ts          Entrypoint
-  config/            env loader & server builder
-  entities/          DB schemas (Drizzle)
-  repositories/      Data access layer
-  services/          Business logic
-  controllers/       HTTP handlers
-  routes/            Route definitions
-  validators/        Zod schemas
-  infrastructure/    External integrations (DB)
-```
+1. **Setup environment**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your database and email settings
+   ```
 
----
-
-## Getting Started (without Docker)
-
-1. **Install deps**
-
+2. **Install and run**
    ```bash
    yarn install
-   ```
-
-2. **Create env file** – copy `.env.example` (or create `.env.development`) and adjust:
-
-   ```bash
-   DATABASE_URL=postgres://postgres:postgres@localhost:5432/app_db
-   PORT=3000
-   ```
-
-3. **Run migrations & start dev server**
-
-   ```bash
-   # one-off
-   yarn migrate
-
-   # start with reload
    yarn dev
    ```
 
-4. Open `http://localhost:3000/health` or Swagger docs at `http://localhost:3000/documentation` (if enabled).
+3. **Access the app**
+   - API: `http://localhost:3000`
+   - Swagger Docs: `http://localhost:3000/docs`
+   - Health Check: `http://localhost:3000/health`
 
----
 
-## Docker
+## 🛠️ Scripts
+
+- `yarn dev` - Start development server
+- `yarn build` - Build for production
+- `yarn start` - Start production server
+- `yarn migrate` - Run database migrations
+- `yarn lint` - Run ESLint
+- `yarn format` - Format code with Prettier
+
+## 🔧 Git Hooks (Husky)
+
+This project uses Husky for Git hooks to ensure code quality:
+
+- **Pre-commit**: Runs linting (`yarn lint`) and formatting (`yarn format`)
+- **Pre-push**: Runs build (`yarn build`) to ensure code compiles
+
+Git hooks are automatically installed when you run `yarn install`.
+
+## 📚 API Endpoints
+
+### Authentication
+- `POST /auth/register` - Register new user
+- `POST /auth/login` - Login user
+- `POST /auth/refresh` - Refresh token
+- `POST /auth/logout` - Logout user
+
+### Email Verification
+- `GET /auth/verify-email/:token` - Verify email
+- `POST /auth/verify-email` - Resend verification
+
+### Password Reset
+- `POST /auth/forgot-password` - Request reset
+- `POST /auth/reset-password/:token` - Reset password
+
+### Users (Protected)
+- `GET /api/users` - Get all users
+- `GET /api/users/:id` - Get user by ID
+- `POST /api/users` - Create user
+- `PUT /api/users/:id` - Update user
+- `DELETE /api/users/:id` - Delete user
+
+## 🏗️ Project Structure
+
+```
+src/
+├── config/          # Environment & server config
+├── controllers/     # Route handlers
+├── entities/        # Database schemas
+├── middleware/      # Auth & validation middleware
+├── repositories/    # Data access layer
+├── routes/          # API routes
+├── services/        # Business logic
+├── utils/           # Helper functions
+├── validators/      # Input validation
+└── views/           # Email templates
+```
+
+## 🐳 Docker
 
 ```bash
-# Build & start db + backend
-docker compose up --build
+docker-compose up -d
 ```
-The compose file spins up PostgreSQL and the API container, automatically waiting for the DB before boot.
-
----
-
-## Scripts
-
-| Script          | Description                                  |
-| --------------- | -------------------------------------------- |
-| `yarn dev`      | Run dev server with hot reload & migrations  |
-| `yarn build`    | Compile TypeScript → `dist/`                 |
-| `yarn start`    | Start compiled server                        |
-| `yarn migrate`  | Apply migrations via drizzle-kit             |
-| `yarn lint`     | ESLint all `.ts` files                       |
-| `yarn format`   | Prettier write in `src/**/*.ts`              |
-
----

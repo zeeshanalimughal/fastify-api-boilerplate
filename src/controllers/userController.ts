@@ -20,20 +20,29 @@ export const getUsers = async (_: FastifyRequest, reply: FastifyReply) => {
   reply.send(users);
 };
 
-export const getUserById = async (request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) => {
+export const getUserById = async (
+  request: FastifyRequest<{ Params: { id: string } }>,
+  reply: FastifyReply,
+) => {
   const user = await service.getById(Number(request.params.id));
   if (!user) return reply.code(404).send({ message: "User not found" });
   reply.send(user);
 };
 
-export const updateUser = async (request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) => {
+export const updateUser = async (
+  request: FastifyRequest<{ Params: { id: string } }>,
+  reply: FastifyReply,
+) => {
   const input = updateUserSchema.parse(request.body);
   const user = await service.update(Number(request.params.id), input);
   if (!user) return reply.code(404).send({ message: "User not found" });
   reply.send(user);
 };
 
-export const deleteUser = async (request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) => {
+export const deleteUser = async (
+  request: FastifyRequest<{ Params: { id: string } }>,
+  reply: FastifyReply,
+) => {
   const deleted = await service.delete(Number(request.params.id));
   if (!deleted) return reply.code(404).send({ message: "User not found" });
   reply.code(204).send();

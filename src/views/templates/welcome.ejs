@@ -1,0 +1,12 @@
+<%- include('partials/header', { title: 'Welcome', appName: appName }) %>
+
+<h2>Welcome to <%= appName %></h2>
+
+<p>Hi <%= name %>,</p>
+
+<p>Your account has been verified successfully. You're now ready to get started.</p>
+
+<p>Best regards,<br>
+The <%= appName %> Team</p>
+
+<%- include('partials/footer', { appName: appName }) %>
