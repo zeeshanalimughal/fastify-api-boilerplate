@@ -88,7 +88,7 @@ export async function userRoutes(server: FastifyInstance) {
       },
     },
     async (request, reply) => {
-      const user = (request as any).user;
+      const user = (request as unknown as { user: { id: number } }).user;
       return getUserById({ ...request, params: { id: user.id.toString() } }, reply);
     },
   );
@@ -151,7 +151,7 @@ export async function userRoutes(server: FastifyInstance) {
       },
     },
     async (request, reply) => {
-      const user = (request as any).user;
+      const user = (request as unknown as { user: { id: number } }).user;
       return updateUser({ ...request, params: { id: user.id.toString() } }, reply);
     },
   );

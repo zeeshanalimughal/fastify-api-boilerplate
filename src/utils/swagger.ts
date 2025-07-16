@@ -4,7 +4,7 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 /**
  * Convert Zod schema to JSON schema for Swagger/OpenAPI
  */
-export function zodToSwaggerSchema(schema: z.ZodType<any, any>) {
+export function zodToSwaggerSchema(schema: z.ZodType<unknown, z.ZodTypeDef, unknown>) {
   const jsonSchema = zodToJsonSchema(schema, {
     target: "openApi3",
     definitions: {},
@@ -14,14 +14,14 @@ export function zodToSwaggerSchema(schema: z.ZodType<any, any>) {
   const cleanSchema = JSON.parse(JSON.stringify(jsonSchema));
   delete cleanSchema.$schema;
 
-  function cleanRefs(obj: any): any {
+  function cleanRefs(obj: unknown): unknown {
     if (typeof obj !== "object" || obj === null) return obj;
 
     if (Array.isArray(obj)) {
       return obj.map(cleanRefs);
     }
 
-    const result: any = {};
+    const result: Record<string, unknown> = {};
     for (const [key, value] of Object.entries(obj)) {
       if (key === "$ref") continue;
       result[key] = cleanRefs(value);

@@ -8,16 +8,16 @@ export function errorHandler(
   reply: FastifyReply,
 ) {
   if (
-    (error as any).code === 11000 ||
-    ((error as any).name === "MongoServerError" &&
-      (error as any).message?.includes("duplicate key"))
+    (error as unknown as { code: number }).code === 11000 ||
+    ((error as unknown as { name: string }).name === "MongoServerError" &&
+      (error as unknown as { message: string }).message?.includes("duplicate key"))
   ) {
     reply.status(409).send({
       success: false,
       statusCode: 409,
       error: "Conflict",
       message: "Duplicate key error: a record with this value already exists.",
-      details: (error as any).keyValue || undefined,
+      details: (error as unknown as { keyValue: Record<string, unknown> }).keyValue || undefined,
     });
   } else if (error instanceof ForbiddenException) {
     reply.status(403).send({
@@ -33,13 +33,13 @@ export function errorHandler(
       error: error.name,
       message: error.response,
     });
-  } else if ((error as any).validation) {
+  } else if ((error as unknown as { validation: unknown }).validation) {
     reply.status(400).send({
       success: false,
       statusCode: 400,
       error: "Bad Request",
       message: "Validation failed",
-      details: (error as any).validation,
+      details: (error as unknown as { validation: unknown }).validation,
     });
   } else {
     reply.status(500).send({
