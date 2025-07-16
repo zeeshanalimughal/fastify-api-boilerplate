@@ -7,8 +7,8 @@ import {
   deleteUser,
 } from "../controllers/userController";
 import { createUserSchema, updateUserSchema } from "../validators/userSchema";
-import { zodToSwaggerSchema, commonResponses, userResponseSchema } from "../utils/swagger";
-import { requireAuth, requireRole } from "../middleware/authMiddleware";
+import { zodToSwaggerSchema, commonResponses, userResponseSchema } from "../../utils/swagger";
+import { requireAuth, requireRole } from "../../middleware/authMiddleware";
 
 export async function userRoutes(server: FastifyInstance) {
   // Create user (Admin only)

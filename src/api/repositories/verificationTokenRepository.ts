@@ -1,4 +1,4 @@
-import { db } from "../infrastructure/db";
+import { db } from "../../db/connection";
 import {
   verificationTokens,
   NewVerificationToken,
@@ -6,7 +6,7 @@ import {
 } from "../entities/verificationToken";
 import { users } from "../entities/user";
 import { eq, and, sql, count, lte, desc } from "drizzle-orm";
-import { TokenType } from "../constants/tokens";
+import { TokenType } from "../../constants/tokens";
 
 export class VerificationTokenRepository {
   async create(data: NewVerificationToken): Promise<VerificationToken> {

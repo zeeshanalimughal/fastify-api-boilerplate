@@ -1,4 +1,4 @@
-import { db } from "../infrastructure/db";
+import { db } from "../../db/connection";
 import { users, NewUser, User } from "../entities/user";
 import { eq, count, sql } from "drizzle-orm";
 

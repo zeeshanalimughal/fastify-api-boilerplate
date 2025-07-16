@@ -1,4 +1,4 @@
-import { db } from "../infrastructure/db";
+import { db } from "../../db/connection";
 import { refreshTokens, NewRefreshToken, RefreshToken } from "../entities/refreshToken";
 import { users } from "../entities/user";
 import { eq, and, sql, count, lte } from "drizzle-orm";

@@ -1,10 +1,9 @@
 import Fastify from "fastify";
 import fastifyEnv from "@fastify/env";
-import fastifyCors from "@fastify/cors";
 
 export const buildServer = () => {
   const server = Fastify({
-    logger: true,
+    logger: false,
   });
 
   server.register(fastifyEnv, {
@@ -24,6 +23,5 @@ export const buildServer = () => {
     },
   });
 
-  server.register(fastifyCors, { origin: true });
   return server;
 };

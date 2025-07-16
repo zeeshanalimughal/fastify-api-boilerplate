@@ -29,6 +29,12 @@ const envSchema = z.object({
   SMTP_USER: z.string().optional(),
   SMTP_PASS: z.string().optional(),
   SENDGRID_API_KEY: z.string().optional(),
+
+  REDIS_URL: z.string().url(),
+
+  AWS_ACCESS_KEY_ID: z.string().optional(),
+  AWS_SECRET_ACCESS_KEY: z.string().optional(),
+  AWS_REGION: z.string().optional(),
 });
 
 export const env = envSchema.parse(process.env);

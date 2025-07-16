@@ -10,7 +10,7 @@ import { env } from "../../config/env";
 interface SendEmailInput {
   to: string;
   template: EmailTemplateKey;
-  variables: Record<string, any>;
+  variables: Record<string, unknown>;
 }
 
 const providerSchema = z.enum(["smtp", "sendgrid"]);
@@ -34,8 +34,6 @@ export class EmailService {
       throw new Error(`Email templates directory not found: ${this.rootDir}`);
     }
 
-    console.log(`Using email templates from: ${this.rootDir}`);
-
     const provider = providerSchema.parse(env.EMAIL_PROVIDER) as ProviderType;
     if (provider === "sendgrid") {
       this.provider = new SendGridProvider(process.env);
@@ -44,7 +42,7 @@ export class EmailService {
     }
   }
 
-  private async renderTemplate(template: EmailTemplateKey, variables: Record<string, any>) {
+  private async renderTemplate(template: EmailTemplateKey, variables: Record<string, unknown>) {
     const filePath = path.join(this.rootDir, EmailTemplates[template]);
 
     if (!fs.existsSync(filePath)) {

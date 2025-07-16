@@ -1,13 +1,25 @@
 import { buildServer } from "./config/index";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUI from "@fastify/swagger-ui";
-import { userRoutes } from "./routes/userRoutes";
-import authRoutes from "./routes/authRoutes";
+import { userRoutes } from "./api/routes/userRoutes";
+import authRoutes from "./api/routes/authRoutes";
 import jwt from "@fastify/jwt";
 import { env } from "./config/env";
+import fastifyHelmet from "@fastify/helmet";
+import fastifyCors from "@fastify/cors";
+import fastifyRateLimit from "@fastify/rate-limit";
+import { errorHandler } from "./middleware/errorMiddleware";
 
 export const createApp = async () => {
   const server = buildServer();
+
+  // Security middleware
+  await server.register(fastifyHelmet);
+  await server.register(fastifyCors, { origin: true });
+  await server.register(fastifyRateLimit, {
+    max: 100,
+    timeWindow: "1 minute",
+  });
 
   // JWT plugin
   await server.register(jwt, {
@@ -82,8 +94,8 @@ export const createApp = async () => {
     transformSpecificationClone: true,
   });
 
-  await server.register(userRoutes, { prefix: "/api" });
-  await server.register(authRoutes, { prefix: "/auth" });
+  await server.register(userRoutes, { prefix: "/api/v1/users" });
+  await server.register(authRoutes, { prefix: "/api/v1/auth" });
 
   // Health check endpoint
   server.get(
@@ -130,11 +142,7 @@ export const createApp = async () => {
       timestamp: new Date().toISOString(),
     }),
   );
-  server.setErrorHandler((error, _request, reply) => {
-    server.log.error(error);
-    const statusCode = error.statusCode ?? 500;
-    reply.status(statusCode).send({ message: error.message || "Internal Server Error" });
-  });
+  server.setErrorHandler(errorHandler);
 
   return server;
 };

@@ -1,32 +1,32 @@
 import { UserRepository } from "../repositories/userRepository";
 import { RefreshTokenRepository } from "../repositories/refreshTokenRepository";
 import { VerificationTokenRepository } from "../repositories/verificationTokenRepository";
-import { hashPassword, verifyPassword } from "../utils/hash";
-import { generateAccessToken, generateRefreshToken } from "../utils/jwt";
+import { hashPassword, verifyPassword } from "../../utils/hash";
+import { generateAccessToken, generateRefreshToken } from "../../utils/jwt";
 import {
   generateVerificationToken,
   generatePasswordResetToken,
   getTokenExpiration,
   isTokenExpired,
-} from "../utils/tokens";
+} from "../../utils/tokens";
 import {
   generateVerificationUrl,
   generatePasswordResetUrl,
   generateFrontendUrl,
-} from "../utils/urls";
-import { Errors } from "../constants/errors";
-import { TokenTypes } from "../constants/tokens";
+} from "../../utils/urls";
+import { Errors } from "../../constants/errors";
+import { TokenTypes } from "../../constants/tokens";
 import {
   RegisterInput,
   LoginInput,
   ForgotPasswordInput,
   ResetPasswordInput,
   VerifyEmailInput,
-} from "../validators/authSchema";
+} from "../../api/validators/authSchema";
 import { NewRefreshToken } from "../entities/refreshToken";
 import { NewVerificationToken } from "../entities/verificationToken";
-import { env } from "../config/env";
-import { EmailService } from "./email";
+import { env } from "../../config/env";
+import { EmailService } from "../../lib/email";
 
 function parseExpiration(str: string) {
   const match = str.match(/(\d+)([dhms])/);

@@ -22,7 +22,7 @@ import {
   commonResponses,
   authResponseSchema,
   successMessageSchema,
-} from "../utils/swagger";
+} from "../../utils/swagger";
 
 export default async function authRoutes(server: FastifyInstance) {
   // Register
